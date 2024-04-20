@@ -35,7 +35,7 @@
             try {
                 // Fetch exchange rates using AJAX with JSON
                 const endpoint = 'latest';
-                const access_key = '13f4fce0630b10ab2385ece3'; // Replace 'API_KEY' with your actual API key
+                const access_key = '13f4fce0630b10ab2385ece3';
                 $.ajax({
                     url: 'https://open.er-api.com/v6/' + endpoint + '?access_key=' + access_key,
                     dataType: 'json',
@@ -67,12 +67,10 @@
                     },
                     error: function (xhr, status, error) {
                         console.error("AJAX request error:", error);
-                        // Handle error gracefully, e.g., display an error message to the user
                     }
                 });
             } catch (error) {
                 console.error(error);
-                // Handle error gracefully, e.g., display an error message to the user
             }
         }
     </script>
