@@ -28,7 +28,7 @@
 </head>
 
 <body>
-<a href="https://www.exchangerate-api.com">Rates By Exchange Rate API</a>
+    <a href="https://www.exchangerate-api.com">Rates By Exchange Rate API</a>
     <div class="input">
         <form>
             <label for="fname">Enter value:</label><br>
@@ -53,7 +53,7 @@
         const inputValue = input.value;
 
         try {
-            // Fetch exchange rates using AJAX with JSONP
+            // Fetch exchange rates using AJAX with JSON
             const endpoint = 'latest';
             const access_key = '13f4fce0630b10ab2385ece3'; // Replace 'API_KEY' with your actual API key
             $.ajax({
@@ -64,13 +64,23 @@
                     let counter = 0;
                     let currency = "";
 
+                    const rates = [];
+
                     // Loop through the exchange rates data
                     for (let i in json.rates) {
-                        currency += i + ": " + inputValue * json.rates[i] + "<br>";
-                        if ((inputValue * json.rates[i]) > 1000000) {
+                        const output = (inputValue * json.rates[i]).toFixed(2);
+                        let valueColor = (output > 1000000) ? "rgb(0, 0, 255)" : "";
+                        rates.push({ currency: i, value: output, color: valueColor }); // Store both currency and value
+                        if ((output) > 1000000) {
                             counter++;
                         }
                     }
+
+                    // Sort the rates array based on the value (descending order)
+                    rates.sort((a, b) => b.value - a.value);
+
+                    // Construct the HTML content for displaying sorted rates
+                    currency = rates.map(rate => `<span style="color: ${rate.color}">${rate.currency}: ${rate.value}</span><br>`).join('');
 
                     document.getElementById("data1").innerHTML = "You are a millionaire in " + counter + " countries";
                     document.getElementById("data2").innerHTML = currency;
@@ -85,6 +95,7 @@
             // Handle error gracefully, e.g., display an error message to the user
         }
     }
+
 
 
 </script>
