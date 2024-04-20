@@ -6,11 +6,16 @@
     <title>Title of the document</title>
     <!-- hide arrows in the form field -->
     <style>
+        body{
+
+        }
         .input,
         .output {
-            margin: 5%;
+            padding:1%;
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-top:5%;
             background-color: lightgrey;
-
         }
 
         input::-webkit-outer-spin-button,
@@ -35,7 +40,7 @@
             try {
                 // Fetch exchange rates using AJAX with JSON
                 const endpoint = 'latest';
-                const access_key = '13f4fce0630b10ab2385ece3';
+                const access_key = '13f4fce0630b10ab2385ece3'; // Replace 'API_KEY' with your actual API key
                 $.ajax({
                     url: 'https://open.er-api.com/v6/' + endpoint + '?access_key=' + access_key,
                     dataType: 'json',
@@ -56,21 +61,28 @@
                             }
                         }
 
+                        var img = "";
+                        if(counter>0){
+                            img = '<br><img width="100px" height="100px" src="leonardo.png" />';
+                        }
+
                         // Sort the rates array based on the value (descending order)
                         rates.sort((a, b) => b.value - a.value);
 
                         // Construct the HTML content for displaying sorted rates
                         currency = rates.map(rate => `<span style="color: ${rate.color}">${rate.currency}: ${rate.value}</span><br>`).join('');
 
-                        document.getElementById("data1").innerHTML = "You are a millionaire in " + counter + " countries";
+                        document.getElementById("data1").innerHTML = "You are a millionaire in " + counter + " countries" + img;
                         document.getElementById("data2").innerHTML = currency;
                     },
                     error: function (xhr, status, error) {
                         console.error("AJAX request error:", error);
+                        // Handle error gracefully, e.g., display an error message to the user
                     }
                 });
             } catch (error) {
                 console.error(error);
+                // Handle error gracefully, e.g., display an error message to the user
             }
         }
     </script>
