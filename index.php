@@ -24,9 +24,11 @@
             -moz-appearance: textfield;
         }
     </style>
+    <script src="jquery-3.7.1.js"></script>
 </head>
 
 <body>
+<a href="https://www.exchangerate-api.com">Rates By Exchange Rate API</a>
     <div class="input">
         <form>
             <label for="fname">Enter value:</label><br>
@@ -44,29 +46,47 @@
 </body>
 
 <script>
-    function generateExchange(event) {
+    async function generateExchange(event) {
         event.preventDefault(); // Prevent default form submission behavior
-        //var val = document.getElementById("input_id").value;
 
         const input = document.getElementById("input_id");
         const inputValue = input.value;
 
-        const myJSON = '{"data": {"CAD": 1.3766101431,"EUR": 0.9393301408,"USD": 1}}'
-        const dataJSON = JSON.parse(myJSON);
+        try {
+            // Fetch exchange rates using AJAX with JSONP
+            const endpoint = 'latest';
+            const access_key = '13f4fce0630b10ab2385ece3'; // Replace 'API_KEY' with your actual API key
+            $.ajax({
+                url: 'https://open.er-api.com/v6/' + endpoint + '?access_key=' + access_key,
+                dataType: 'json',
+                success: function (json) {
+                    console.log(json);
+                    let counter = 0;
+                    let currency = "";
 
-        counter = 0;
-        currency = "";
+                    // Loop through the exchange rates data
+                    for (let i in json.rates) {
+                        currency += i + ": " + inputValue * json.rates[i] + "<br>";
+                        if ((inputValue * json.rates[i]) > 1000000) {
+                            counter++;
+                        }
+                    }
 
-        for (let i in dataJSON.data) {
-            currency += i + ": " + inputValue * dataJSON.data[i] + "<br>";
-            if ((inputValue * dataJSON.data[i]) > 1000000) {
-                counter++;
-            }
+                    document.getElementById("data1").innerHTML = "You are a millionaire in " + counter + " countries";
+                    document.getElementById("data2").innerHTML = currency;
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request error:", error);
+                    // Handle error gracefully, e.g., display an error message to the user
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            // Handle error gracefully, e.g., display an error message to the user
         }
-
-        document.getElementById("data1").innerHTML = "Millionaire counter: " + counter;
-        document.getElementById("data2").innerHTML = currency;
     }
+
+
 </script>
 
 </html>
